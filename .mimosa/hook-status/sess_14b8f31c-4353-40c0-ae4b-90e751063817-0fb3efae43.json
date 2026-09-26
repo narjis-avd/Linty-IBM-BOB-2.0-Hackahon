@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "mimosa-hook-status/v1",
+  "recordedAt": "2026-09-26T15:15:17.015Z",
+  "sessionId": "sess_14b8f31c-4353-40c0-ae4b-90e751063817",
+  "event": "PreToolUse",
+  "toolName": "Edit",
+  "file": "D:\\github projects\\ReplicaForge\\components\\monaco-editor.tsx",
+  "outcome": "inconclusive",
+  "coverage": "partial",
+  "findingCount": 0,
+  "durationMs": 1054,
+  "telemetry": {
+    "schemaVersion": "mimosa-gate-telemetry/v1",
+    "profile": "gate",
+    "operation": "PreToolUse",
+    "outcome": "partial/INCONCLUSIVE",
+    "latencyMs": 1054,
+    "peakMemoryBytes": 111067136,
+    "memoryMeasurement": "max-observed-process-rss",
+    "scannedFiles": 1,
+    "cache": {
+      "hits": 0,
+      "misses": 1,
+      "measurement": "not-applicable"
+    },
+    "denyCount": 0,
+    "tokens": {
+      "input": 0,
+      "output": 0,
+      "total": 0,
+      "modelCalls": 0,
+      "measurement": "known-zero"
+    }
+  },
+  "hostState": "hook_complete_waiting_host_tool_decision",
+  "reportHint": ".mimosa/reports/"
+}
