@@ -1,55 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Linty
 
-## Getting Started
+**Linty turns a code review into minutes of verified work.** Four IBM Bob agents find the bugs in a file, fix them, write regression tests, and summarise the result. Then Linty *runs* those tests against the buggy and the fixed code, so every fix comes with proof.
 
-First, run the development server:
+Built by **Team North** for the IBM Bob 2.0 Hackathon.
+
+## How it works
+
+```
+/linty-review samples/cart-total.ts            (IBM Bob IDE)
+        │
+        ▼
+🧹 Linty Orchestrator ── subtask ──► 🔍 Analyzer  → runs/<name>/analysis.json
+                      ── subtask ──► 🔧 Fixer     → runs/<name>/fixed.ts + fixes.json
+                      ── subtask ──► 🧪 Tester    → runs/<name>/linty.test.ts
+                      ── subtask ──► 📊 Reporter  → runs/<name>/report.json
+        │
+        ▼
+scripts/linty.mjs finalize
+  • runs the generated tests on the ORIGINAL code (they should fail)
+  • runs them on the FIXED code (they should pass)
+  • measures each agent's time from its output file
+  • scores detection against the seeded bugs in samples/<name>.expected.json
+        │
+        ▼
+public/reports/<name>.json  ──►  Linty web app (Vercel): issues, side-by-side diff, tests, report
+```
+
+### IBM Bob is the engine
+
+| Bob feature | How Linty uses it |
+|---|---|
+| Custom modes (`.bob/custom_modes.yaml`) | One orchestrator plus four specialist modes. Each specialist can only write its own output file (`fileRegex`), so the Analyzer can't edit code and the Fixer can't touch tests. |
+| Subtasks | The orchestrator delegates each stage to a specialist mode as a separate subtask: a real multi-agent pipeline. |
+| Slash command (`.bob/commands/linty-review.md`) | `/linty-review <file>` runs the whole pipeline. |
+| Rules (`.bob/rules/linty.md`, `AGENTS.md`) | Project guardrails: no secrets, don't edit ground truth, report only measured numbers. |
+| `.bobignore` | Keeps `node_modules`, build output and env files out of Bob's context. |
+
+The agent prompts live in `prompts/` and are shared by the Bob modes and the optional live pipeline.
+
+### Honest numbers
+
+Every metric in the app is measured, not estimated:
+
+- **Seeded bugs caught:** each sample has a hand-written list of its bugs (`samples/*.expected.json`). An issue counts as caught if the Analyzer flags a line within 2 lines of it.
+- **Regression tests before → after:** the Tester's Vitest file is executed against both versions of the code.
+- **Pipeline time:** from the Bob run's start to when each agent wrote its file.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Run a review inside IBM Bob IDE (v2.0.2 or later), from the repo root:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Local analysis history
-
-Completed analyses are saved through the replaceable `AnalysisStore` interface in `lib/store/analysis-store.ts`. By default, the server uses an in-memory store, so history is cleared whenever the server restarts or the deployment instance is replaced. This is intentional and is not durable production persistence.
-
-To use local filesystem persistence on a Node deployment, set `REPLICAFORGE_ANALYSIS_STORE` to a writable JSON file path. The store writes atomically and can later be replaced with a database-backed implementation without changing the API route or dashboard.
-
-## Optional live analyzer tests
-
-Ordinary tests use local fixtures and mocks. The ACN integration test is opt-in and analyzes `https://acn.com.pk/` with the real analyzer. It accepts a completed result or a controlled analyzer failure, prints stable summary counters, and does not assert website-specific counts.
-
-On PowerShell:
-
-```powershell
-$env:RUN_LIVE_TESTS = "true"
-npm run test -- tests/integration.acn-live.test.ts
+```
+/linty-review samples/cart-total.ts
 ```
 
-The test is skipped when `RUN_LIVE_TESTS` is not exactly `true`. A temporary network, DNS, or browser failure is reported as a controlled analyzer failure rather than making the test fail. The test fails only for malformed analyzer output, crashes, or valid HTTP/HTTPS source URLs being classified as `unsupported_protocol`.
+Then commit `runs/<name>/` and `public/reports/` and the web app will list the run.
 
-## Learn More
+### Optional: live analysis with watsonx.ai
 
-To learn more about Next.js, take a look at the following resources:
+Copy `.env.example` to `.env.local` and fill in an IBM watsonx.ai API key and project ID. The web app's **Run AI Analysis** button then runs the same four prompts against a Granite model and streams each stage live. Without credentials, the deployed app shows recorded Bob runs.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Path | What it is |
+|---|---|
+| `.bob/` | Bob modes, `/linty-review` command, rules |
+| `prompts/` | The four agent prompts |
+| `samples/` | Demo files with seeded bugs and their ground truth |
+| `scripts/linty.mjs` | Starts and finalises a Bob run; runs the tests; measures |
+| `runs/` | Every Bob run's raw agent output (evidence of Bob's work) |
+| `public/reports/` | Finalised reports the web app reads |
+| `lib/linty/schema.ts` | The report schema shared by everything |
+| `backend/` | Optional watsonx.ai client and streaming pipeline |
+| `app/` | Next.js web app |
+| `bob_sessions/` | Bob task session screenshots and exported histories from every team member |
 
-## Deploy on Vercel
+## AI tools disclosure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+In line with the hackathon code of conduct:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **IBM Bob IDE** is the core of the product: it runs every Linty review (see `runs/` and `bob_sessions/`).
+- **Claude Code (Anthropic)** helped one team member rebuild the backend, the Bob configuration, the run script and the web UI during the event.
+- An earlier prototype of the UI and agent classes was scaffolded with other AI coding assistants and then replaced.
+- Team members wrote the agent prompts' requirements, the project direction, the demo and the pitch.
+
+## Team North
+
+Mujtaba Zubair · Narjis Fatima · Saman Nadeem · Hamza Hassan Khan · Naveen Subhan · Muzammil Qureshi
+
+## License
+
+[MIT](LICENSE)

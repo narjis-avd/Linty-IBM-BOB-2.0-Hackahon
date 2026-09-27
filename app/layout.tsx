@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ReplicaForge | Frontend intelligence",
-  description: "Analyze public websites and prepare safe frontend metadata for editable replica generation.",
+  title: "Linty | AI code review, fixes and tests",
+  description: "Linty runs four IBM Bob agents that find bugs, fix them, write regression tests and prove the fix.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

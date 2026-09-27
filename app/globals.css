@@ -1,8 +1,7 @@
 @import "tailwindcss";
-@import "./styles/code-analyzer.css";
 
 :root {
-  --background: #0a0c0a;
+  --background: #0B0F1A;
   --foreground: #ededed;
 }
 
@@ -20,8 +19,8 @@ body {
 }
 
 ::selection {
-  background: rgba(190, 242, 100, 0.25);
-  color: #ecfccb;
+  background: rgba(79, 140, 255, 0.3);
+  color: #e0ecff;
 }
 
 /* Custom scrollbar */
