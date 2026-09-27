@@ -1,0 +1,9 @@
+{
+  "summary": "Six bugs were found across four functions in the grades module, all rated High or Medium risk. Two off-by-one boundary errors (letterGrade at 90, passRate at 60) produced wrong letter grades and pass-rate percentages; classAverage returned NaN on empty input due to division by zero; topStudents silently mutated the caller's array; and medianPoints was broken for all inputs because it sorted numbers lexicographically, and additionally computed the wrong median for even-length arrays. All six issues were fixed, and 27 tests now guard against each regression.",
+  "recommendations": [
+    "Add input-validation or TypeScript overloads to enforce non-empty arrays where NaN is not a valid return.",
+    "Enable a lint rule (e.g. eslint-plugin-unicorn's no-array-sort-mutation) to catch in-place sort side-effects.",
+    "Add boundary-value test cases (e.g. exactly-threshold scores) to the project's standard test suite.",
+    "Run the 27 generated tests in CI to prevent regressions on all fixed issues."
+  ]
+}

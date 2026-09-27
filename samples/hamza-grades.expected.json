@@ -1,0 +1,9 @@
+{
+  "bugs": [
+    { "id": "a-boundary", "line": 11, "description": "Uses > 90, so a score of exactly 90 gets a B instead of an A" },
+    { "id": "empty-average", "line": 20, "description": "An empty class divides by zero and returns NaN" },
+    { "id": "mutates-input", "line": 25, "description": "Array.prototype.sort reorders the caller's scores array in place" },
+    { "id": "pass-boundary", "line": 32, "description": "Uses > 60, so a score of exactly 60 counts as a fail even though 60 is a pass" },
+    { "id": "string-sort", "line": 38, "description": "sort() without a compare function sorts numbers as text (100 before 65); the median is also wrong for an even number of scores" }
+  ]
+}

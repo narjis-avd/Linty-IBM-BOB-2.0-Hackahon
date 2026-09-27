@@ -1,0 +1,26 @@
+[
+  {
+    "issueId": "E1",
+    "change": "Changed `points > 90` to `points >= 90` in letterGrade so a score of exactly 90 correctly returns 'A'."
+  },
+  {
+    "issueId": "E2",
+    "change": "Added an early `if (scores.length === 0) return 0` guard in classAverage to prevent division by zero returning NaN on an empty array."
+  },
+  {
+    "issueId": "E3",
+    "change": "Changed `scores.sort(...)` to `[...scores].sort(...)` in topStudents to sort a shallow copy and avoid mutating the caller's original array."
+  },
+  {
+    "issueId": "E4",
+    "change": "Changed `s.points > 60` to `s.points >= 60` in passRate so students with exactly 60 points are correctly counted as passing."
+  },
+  {
+    "issueId": "E5",
+    "change": "Added a numeric comparator `(a, b) => a - b` to the `.sort()` call in medianPoints to prevent lexicographic ordering of numbers."
+  },
+  {
+    "issueId": "E6",
+    "change": "Updated medianPoints to average the two middle elements for even-length arrays instead of always returning the upper-middle index."
+  }
+]
