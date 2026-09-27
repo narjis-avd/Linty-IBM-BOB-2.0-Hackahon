@@ -1,0 +1,22 @@
+[
+  {
+    "issueId": "E1",
+    "change": "Changed loop condition from `i <= items.length` to `i < items.length` to prevent out-of-bounds access."
+  },
+  {
+    "issueId": "E2",
+    "change": "Changed return value from `subtotal * discount` to `subtotal * (1 - discount)` so the discount is subtracted, not applied as a multiplier."
+  },
+  {
+    "issueId": "E3",
+    "change": "Added an early-return guard `if (items.length === 0) return 0;` before the divide to prevent NaN."
+  },
+  {
+    "issueId": "E4",
+    "change": "Replaced `items.sort(...)` with `[...items].sort(...)` so the original array is not mutated."
+  },
+  {
+    "issueId": "E5",
+    "change": "Replaced `'$' + amount` with `'$' + amount.toFixed(2)` to produce a properly formatted currency string."
+  }
+]

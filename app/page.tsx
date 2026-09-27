@@ -69,6 +69,11 @@ export default function Home() {
       .then((res) => (res.ok ? res.json() : []))
       .then(setIndex)
       .catch(() => setIndex([]));
+    // Deep link, e.g. /#run=cart-total&tab=report, so a run can be shared directly.
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    const run = params.get('run');
+    const tab = params.get('tab') as Tab | null;
+    if (run && /^[\w-]+$/.test(run)) replay(run, tab && ['issues', 'fixed', 'tests', 'report'].includes(tab) ? tab : 'issues');
     fetch('/api/analyze')
       .then((res) => res.json())
       .then(setLive)
@@ -84,7 +89,7 @@ export default function Home() {
   }
 
   // Replays a recorded Bob run stage by stage. Durations are compressed; the real ones are shown beside each stage.
-  async function replay(id: string) {
+  async function replay(id: string, openTab: Tab = 'issues') {
     reset();
     setRunning(true);
     setMode('replay');
@@ -106,6 +111,7 @@ export default function Home() {
         if (real[stage] !== undefined) setStageMs((m) => ({ ...m, [stage]: real[stage] }));
       }
       setReport(data);
+      setTab(openTab);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Replay failed');
     } finally {

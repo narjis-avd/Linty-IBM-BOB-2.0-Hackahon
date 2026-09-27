@@ -18,6 +18,8 @@ const REPORTS = path.join(ROOT, 'public', 'reports');
 
 const [command, target, ...rest] = process.argv.slice(2);
 const author = rest.includes('--author') ? rest[rest.indexOf('--author') + 1] : undefined;
+// Single-task Bob chat runs write every file at once, so per-stage timings would be meaningless.
+const skipTimings = rest.includes('--no-timings');
 
 function fail(message) {
   console.error(`linty: ${message}`);
@@ -103,7 +105,7 @@ function finalize(name) {
   const tTest = mtime('linty.test.ts');
   const tReport = mtime('report.json');
   const timings =
-    t0 < tAnalyze && tAnalyze <= tFix && tFix <= tTest && tTest <= tReport
+    !skipTimings && t0 < tAnalyze && tAnalyze <= tFix && tFix <= tTest && tTest <= tReport
       ? {
           analyzeMs: Math.round(tAnalyze - t0),
           fixMs: Math.round(tFix - tAnalyze),

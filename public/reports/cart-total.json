@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "id": "cart-total",
+  "title": "cart-total",
+  "fileName": "samples/cart-total.ts",
+  "language": "typescript",
+  "source": {
+    "kind": "bob",
+    "model": "IBM Bob IDE",
+    "recordedAt": "2026-09-27T14:19:07.227Z",
+    "author": "Mujtaba"
+  },
+  "originalCode": "// Linty demo sample: shopping cart maths with seeded bugs.\n// Ground truth lives in cart-total.expected.json. Do not fix by hand.\n\nexport interface CartItem {\n  sku: string;\n  price: number; // unit price in dollars\n  quantity: number;\n}\n\nexport function cartSubtotal(items: CartItem[]): number {\n  let total = 0;\n  for (let i = 0; i <= items.length; i++) {\n    total += items[i].price * items[i].quantity;\n  }\n  return total;\n}\n\n// discount is a fraction, e.g. 0.2 for 20% off\nexport function applyDiscount(subtotal: number, discount: number): number {\n  return subtotal * discount;\n}\n\nexport function averageItemPrice(items: CartItem[]): number {\n  const sum = items.reduce((acc, item) => acc + item.price, 0);\n  return sum / items.length;\n}\n\nexport function mostExpensive(items: CartItem[]): CartItem | undefined {\n  return items.sort((a, b) => b.price - a.price)[0];\n}\n\nexport function formatTotal(amount: number): string {\n  return '$' + amount;\n}\n",
+  "analysis": {
+    "errors": [
+      {
+        "id": "E1",
+        "type": "Runtime",
+        "description": "Off-by-one error: loop condition uses `<=` instead of `<`, so `items[items.length]` is accessed, which is `undefined`, causing a TypeError at runtime.",
+        "line": 12,
+        "severity": "High",
+        "suggestion": "Change `i <= items.length` to `i < items.length`."
+      },
+      {
+        "id": "E2",
+        "type": "Logical",
+        "description": "`applyDiscount` returns `subtotal * discount` instead of `subtotal * (1 - discount)`. A 20% discount should reduce the subtotal by 20%, not reduce it to 20% of its value.",
+        "line": 20,
+        "severity": "High",
+        "suggestion": "Return `subtotal * (1 - discount)` to apply the discount correctly."
+      },
+      {
+        "id": "E3",
+        "type": "Runtime",
+        "description": "`averageItemPrice` divides by `items.length` without guarding against an empty array, resulting in division by zero (returns `NaN`).",
+        "line": 25,
+        "severity": "Medium",
+        "suggestion": "Return `0` (or `NaN`) early when `items.length === 0`."
+      },
+      {
+        "id": "E4",
+        "type": "Logical",
+        "description": "`mostExpensive` calls `Array.prototype.sort` in-place, mutating the caller's array. The original order is destroyed as a side-effect.",
+        "line": 29,
+        "severity": "Medium",
+        "suggestion": "Spread the array before sorting: `[...items].sort(...)`."
+      },
+      {
+        "id": "E5",
+        "type": "Logical",
+        "description": "`formatTotal` concatenates a number directly onto a string, producing values like `'$9.999999999'` instead of a properly formatted currency string.",
+        "line": 33,
+        "severity": "Low",
+        "suggestion": "Use `amount.toFixed(2)` to produce a two-decimal currency string: `'$' + amount.toFixed(2)`."
+      }
+    ],
+    "risk_level": "High",
+    "summary": "The file contains two High-severity bugs (an off-by-one loop that crashes at runtime and an inverted discount formula that returns the wrong value), two Medium bugs (division-by-zero on empty input and destructive in-place sort), and one Low issue (unformatted currency output). The High bugs make `cartSubtotal` and `applyDiscount` completely unusable in production."
+  },
+  "fix": {
+    "fixedCode": "// Linty demo sample: shopping cart maths with seeded bugs.\r\n// Ground truth lives in cart-total.expected.json. Do not fix by hand.\r\n\r\nexport interface CartItem {\r\n  sku: string;\r\n  price: number; // unit price in dollars\r\n  quantity: number;\r\n}\r\n\r\nexport function cartSubtotal(items: CartItem[]): number {\r\n  let total = 0;\r\n  for (let i = 0; i < items.length; i++) { // E1: < not <=\r\n    total += items[i].price * items[i].quantity;\r\n  }\r\n  return total;\r\n}\r\n\r\n// discount is a fraction, e.g. 0.2 for 20% off\r\nexport function applyDiscount(subtotal: number, discount: number): number {\r\n  return subtotal * (1 - discount); // E2: apply discount, not replace with fraction\r\n}\r\n\r\nexport function averageItemPrice(items: CartItem[]): number {\r\n  if (items.length === 0) return 0; // E3: guard against empty array\r\n  const sum = items.reduce((acc, item) => acc + item.price, 0);\r\n  return sum / items.length;\r\n}\r\n\r\nexport function mostExpensive(items: CartItem[]): CartItem | undefined {\r\n  return [...items].sort((a, b) => b.price - a.price)[0]; // E4: copy before sort\r\n}\r\n\r\nexport function formatTotal(amount: number): string {\r\n  return '$' + amount.toFixed(2); // E5: two-decimal currency format\r\n}\r\n",
+    "fixes": [
+      {
+        "issueId": "E1",
+        "change": "Changed loop condition from `i <= items.length` to `i < items.length` to prevent out-of-bounds access."
+      },
+      {
+        "issueId": "E2",
+        "change": "Changed return value from `subtotal * discount` to `subtotal * (1 - discount)` so the discount is subtracted, not applied as a multiplier."
+      },
+      {
+        "issueId": "E3",
+        "change": "Added an early-return guard `if (items.length === 0) return 0;` before the divide to prevent NaN."
+      },
+      {
+        "issueId": "E4",
+        "change": "Replaced `items.sort(...)` with `[...items].sort(...)` so the original array is not mutated."
+      },
+      {
+        "issueId": "E5",
+        "change": "Replaced `'$' + amount` with `'$' + amount.toFixed(2)` to produce a properly formatted currency string."
+      }
+    ]
+  },
+  "tests": {
+    "framework": "vitest",
+    "code": "import { describe, it, expect } from 'vitest';\r\nimport {\r\n  cartSubtotal,\r\n  applyDiscount,\r\n  averageItemPrice,\r\n  mostExpensive,\r\n  formatTotal,\r\n  CartItem,\r\n} from './subject';\r\n\r\nconst sampleItems: CartItem[] = [\r\n  { sku: 'A', price: 10, quantity: 2 },\r\n  { sku: 'B', price: 5,  quantity: 3 },\r\n  { sku: 'C', price: 20, quantity: 1 },\r\n];\r\n\r\ndescribe('cartSubtotal', () => {\r\n  it('[E1] does not throw on a non-empty array', () => {\r\n    // Original crashes with TypeError due to off-by-one; fixed returns a number.\r\n    expect(() => cartSubtotal(sampleItems)).not.toThrow();\r\n  });\r\n\r\n  it('[E1] returns the correct subtotal', () => {\r\n    // 10*2 + 5*3 + 20*1 = 55\r\n    expect(cartSubtotal(sampleItems)).toBe(55);\r\n  });\r\n});\r\n\r\ndescribe('applyDiscount', () => {\r\n  it('[E2] deducts 20% from the subtotal', () => {\r\n    // Original returns 100 * 0.2 = 20; fixed returns 100 * 0.8 = 80.\r\n    expect(applyDiscount(100, 0.2)).toBe(80);\r\n  });\r\n\r\n  it('[E2] a 0% discount leaves the subtotal unchanged', () => {\r\n    expect(applyDiscount(50, 0)).toBe(50);\r\n  });\r\n});\r\n\r\ndescribe('averageItemPrice', () => {\r\n  it('[E3] returns 0 for an empty array instead of NaN', () => {\r\n    // Original divides 0/0 = NaN; fixed returns 0.\r\n    expect(averageItemPrice([])).toBe(0);\r\n  });\r\n\r\n  it('[E3] computes the correct average for non-empty input', () => {\r\n    // (10 + 5 + 20) / 3 ≈ 11.666...\r\n    expect(averageItemPrice(sampleItems)).toBeCloseTo(11.667, 2);\r\n  });\r\n});\r\n\r\ndescribe('mostExpensive', () => {\r\n  it('[E4] does not mutate the original array', () => {\r\n    const items: CartItem[] = [\r\n      { sku: 'X', price: 1, quantity: 1 },\r\n      { sku: 'Y', price: 3, quantity: 1 },\r\n      { sku: 'Z', price: 2, quantity: 1 },\r\n    ];\r\n    const originalOrder = items.map((i) => i.sku);\r\n    mostExpensive(items);\r\n    expect(items.map((i) => i.sku)).toEqual(originalOrder);\r\n  });\r\n\r\n  it('[E4] returns the item with the highest price', () => {\r\n    expect(mostExpensive(sampleItems)?.sku).toBe('C');\r\n  });\r\n});\r\n\r\ndescribe('formatTotal', () => {\r\n  it('[E5] formats a whole number with two decimal places', () => {\r\n    // Original returns '$9'; fixed returns '$9.00'.\r\n    expect(formatTotal(9)).toBe('$9.00');\r\n  });\r\n\r\n  it('[E5] rounds a floating-point value to two decimals', () => {\r\n    // Original returns '$9.999999999'; fixed returns '$10.00'.\r\n    expect(formatTotal(9.999999999)).toBe('$10.00');\r\n  });\r\n});\r\n\r\n// ── Edge cases ──────────────────────────────────────────────────────────────\r\n\r\ndescribe('edge cases', () => {\r\n  it('cartSubtotal returns 0 for an empty cart', () => {\r\n    expect(cartSubtotal([])).toBe(0);\r\n  });\r\n\r\n  it('mostExpensive returns undefined for an empty array', () => {\r\n    expect(mostExpensive([])).toBeUndefined();\r\n  });\r\n});\r\n",
+    "cases": [
+      {
+        "name": "[E1] does not throw on a non-empty array",
+        "issueId": "E1"
+      },
+      {
+        "name": "[E1] returns the correct subtotal",
+        "issueId": "E1"
+      },
+      {
+        "name": "[E2] deducts 20% from the subtotal",
+        "issueId": "E2"
+      },
+      {
+        "name": "[E2] a 0% discount leaves the subtotal unchanged",
+        "issueId": "E2"
+      },
+      {
+        "name": "[E3] returns 0 for an empty array instead of NaN",
+        "issueId": "E3"
+      },
+      {
+        "name": "[E3] computes the correct average for non-empty input",
+        "issueId": "E3"
+      },
+      {
+        "name": "[E4] does not mutate the original array",
+        "issueId": "E4"
+      },
+      {
+        "name": "[E4] returns the item with the highest price",
+        "issueId": "E4"
+      },
+      {
+        "name": "[E5] formats a whole number with two decimal places",
+        "issueId": "E5"
+      },
+      {
+        "name": "[E5] rounds a floating-point value to two decimals",
+        "issueId": "E5"
+      },
+      {
+        "name": "cartSubtotal returns 0 for an empty cart",
+        "issueId": null
+      },
+      {
+        "name": "mostExpensive returns undefined for an empty array",
+        "issueId": null
+      }
+    ]
+  },
+  "report": {
+    "summary": "Analysis identified 5 bugs across the 5 exported functions: 2 High-severity (off-by-one loop crash in `cartSubtotal`, inverted discount formula in `applyDiscount`), 2 Medium-severity (division-by-zero in `averageItemPrice`, in-place mutation in `mostExpensive`), and 1 Low-severity (unformatted currency output in `formatTotal`). Every High and Medium issue was fixed with a single-line change each, preserving all function signatures and exports. The Vitest suite covers all 5 fixed issues with targeted regression tests plus 2 edge-case tests (empty-cart subtotal and undefined return from `mostExpensive` on empty input), giving 12 test cases in total. No issues remain unfixed after the Agent 2 pass.",
+    "recommendations": [
+      "Add input-validation or TypeScript branded types to `applyDiscount` to enforce that `discount` is in the range [0, 1), preventing logically invalid discounts such as negative values or values ≥ 1.",
+      "Run the Vitest suite in CI on every pull request to catch regressions in cart arithmetic before they reach production.",
+      "Consider replacing the manual `for` loop in `cartSubtotal` with `Array.prototype.reduce` to eliminate the category of off-by-one loop bugs entirely.",
+      "Evaluate whether `averageItemPrice` should return `0` or `NaN` for an empty cart and document the contract explicitly so callers handle it consistently."
+    ]
+  },
+  "verification": {
+    "command": "npx vitest run runs/cart-total/linty.test.ts",
+    "original": {
+      "passed": 3,
+      "failed": 9,
+      "total": 12
+    },
+    "fixed": {
+      "passed": 12,
+      "failed": 0,
+      "total": 12
+    }
+  },
+  "detection": {
+    "expected": 5,
+    "caught": 5,
+    "missed": []
+  }
+}

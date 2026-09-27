@@ -10,3 +10,9 @@ After each Bob task:
 3. Click **Export task history** and save the `.md` file here with the same base name.
 4. Check both files for API keys, tokens or personal info before committing.
 5. Commit from your own GitHub account.
+
+## Log
+
+| Task | Member | What Bob did | Bobcoins | Task ID |
+|---|---|---|---|---|
+| north_task01 | Mujtaba | Linty four-agent review of `samples/cart-total.ts` (Analyzer, Fixer, Tester, Reporter in one Bob task). Output finalized into `runs/cart-total/`: 5/5 seeded bugs caught, generated tests 3/12 → 12/12 passing. | 0.035 | 625ecd9aeb339904ddcd65359… |

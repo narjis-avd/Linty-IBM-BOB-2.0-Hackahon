@@ -1,0 +1,46 @@
+{
+  "errors": [
+    {
+      "id": "E1",
+      "type": "Runtime",
+      "description": "Off-by-one error: loop condition uses `<=` instead of `<`, so `items[items.length]` is accessed, which is `undefined`, causing a TypeError at runtime.",
+      "line": 12,
+      "severity": "High",
+      "suggestion": "Change `i <= items.length` to `i < items.length`."
+    },
+    {
+      "id": "E2",
+      "type": "Logical",
+      "description": "`applyDiscount` returns `subtotal * discount` instead of `subtotal * (1 - discount)`. A 20% discount should reduce the subtotal by 20%, not reduce it to 20% of its value.",
+      "line": 20,
+      "severity": "High",
+      "suggestion": "Return `subtotal * (1 - discount)` to apply the discount correctly."
+    },
+    {
+      "id": "E3",
+      "type": "Runtime",
+      "description": "`averageItemPrice` divides by `items.length` without guarding against an empty array, resulting in division by zero (returns `NaN`).",
+      "line": 25,
+      "severity": "Medium",
+      "suggestion": "Return `0` (or `NaN`) early when `items.length === 0`."
+    },
+    {
+      "id": "E4",
+      "type": "Logical",
+      "description": "`mostExpensive` calls `Array.prototype.sort` in-place, mutating the caller's array. The original order is destroyed as a side-effect.",
+      "line": 29,
+      "severity": "Medium",
+      "suggestion": "Spread the array before sorting: `[...items].sort(...)`."
+    },
+    {
+      "id": "E5",
+      "type": "Logical",
+      "description": "`formatTotal` concatenates a number directly onto a string, producing values like `'$9.999999999'` instead of a properly formatted currency string.",
+      "line": 33,
+      "severity": "Low",
+      "suggestion": "Use `amount.toFixed(2)` to produce a two-decimal currency string: `'$' + amount.toFixed(2)`."
+    }
+  ],
+  "risk_level": "High",
+  "summary": "The file contains two High-severity bugs (an off-by-one loop that crashes at runtime and an inverted discount formula that returns the wrong value), two Medium bugs (division-by-zero on empty input and destructive in-place sort), and one Low issue (unformatted currency output). The High bugs make `cartSubtotal` and `applyDiscount` completely unusable in production."
+}
