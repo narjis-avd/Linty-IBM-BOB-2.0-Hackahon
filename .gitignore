@@ -44,3 +44,5 @@ next-env.d.ts
 # linty run scratch (finalize regenerates these)
 runs/*/subject.*
 runs/*/vitest-*.json
+
+.vercel
