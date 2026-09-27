@@ -91,7 +91,14 @@ In line with the hackathon code of conduct:
 
 ## Team North
 
-Mujtaba Zubair · Narjis Fatima · Saman Nadeem · Hamza Hassan Khan · Naveen Subhan · Muzammil Qureshi
+| Member | Role |
+|---|---|
+| Mujtaba Zubair | Team lead, backend |
+| Narjis Fatima | Project lead, repository |
+| Saman Nadeem | UI design |
+| Naveen Subhan | Testing |
+| Hamza Hassan Khan | Team member |
+| Muzammil Qureshi | Research, UI design support |
 
 ## License
 
