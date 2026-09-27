@@ -1,0 +1,29 @@
+{
+  "bugs": [
+    {
+      "id": "off-by-one",
+      "line": 12,
+      "description": "Loop uses <= so it reads past the end of the array and throws"
+    },
+    {
+      "id": "discount-inverted",
+      "line": 20,
+      "description": "Returns the discount amount instead of the discounted price; should be subtotal * (1 - discount)"
+    },
+    {
+      "id": "divide-by-zero",
+      "line": 25,
+      "description": "Empty cart divides by zero and returns NaN"
+    },
+    {
+      "id": "mutates-input",
+      "line": 29,
+      "description": "Array.prototype.sort reorders the caller's cart in place"
+    },
+    {
+      "id": "money-format",
+      "line": 33,
+      "description": "No rounding to two decimals, e.g. $19.999999999999996"
+    }
+  ]
+}

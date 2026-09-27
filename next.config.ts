@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
+  // The live pipeline reads the shared agent prompts from disk at runtime.
+  outputFileTracingIncludes: {
+    "/api/analyze": ["./prompts/**/*"],
+  },
 };
 
 export default nextConfig;

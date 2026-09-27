@@ -1,0 +1,9 @@
+{
+  "bugs": [
+    { "id": "sql-injection", "line": 15, "description": "Email is concatenated into SQL; must use a parameterised query" },
+    { "id": "undefined-not-null", "line": 20, "description": "Returns undefined, not null, when no user matches, breaking the declared return type" },
+    { "id": "async-foreach", "line": 25, "description": "forEach does not await async callbacks, so count is returned as 0 before queries finish" },
+    { "id": "missing-row", "line": 27, "description": "rows[0] is undefined for unknown ids and .active throws" },
+    { "id": "case-sensitive-admin", "line": 33, "description": "Admin check is case-sensitive, so ADMIN@LINTY.DEV is rejected and trailing spaces break it" }
+  ]
+}

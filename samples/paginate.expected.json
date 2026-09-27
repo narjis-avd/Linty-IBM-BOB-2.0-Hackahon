@@ -1,0 +1,8 @@
+{
+  "bugs": [
+    { "id": "one-based-start", "line": 12, "description": "Page is 1-based but start = page * pageSize skips the whole first page" },
+    { "id": "slice-end", "line": 13, "description": "slice end is exclusive, so pageSize - 1 drops the last item of every page" },
+    { "id": "total-pages-floor", "line": 17, "description": "Math.floor loses the final partial page; should be Math.ceil" },
+    { "id": "nan-page", "line": 22, "description": "Missing or non-numeric input returns NaN instead of defaulting to page 1; no radix and no lower bound" }
+  ]
+}
