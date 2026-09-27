@@ -19,7 +19,7 @@ node_modules/
 
 # production / build output
 /build
-/dist
+dist/
 
 # packaged extensions
 *.vsix

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { analyzeCode } from '@/lib/linty/engine'
+import { analyzeWithFallback } from '@/lib/linty/analyze'
 import type { AnalysisApiResponse, AnalysisError, Language } from '@/lib/linty-data'
 
 export const runtime = 'nodejs'
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     typeof fileName === 'string' && fileName.trim().length > 0 ? fileName.trim() : `snippet.${language === 'typescript' ? 'ts' : 'js'}`
 
   try {
-    const result = analyzeCode(code, language, resolvedFileName)
+    const result = await analyzeWithFallback(code, language, resolvedFileName)
     const payload: AnalysisApiResponse = { ok: true, result }
     return NextResponse.json(payload, { status: 200 })
   } catch (error) {

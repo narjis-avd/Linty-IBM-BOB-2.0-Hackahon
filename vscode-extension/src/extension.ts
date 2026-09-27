@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { analyzeCode } from '@/lib/linty/engine'
+import { analyzeWithFallback } from '@/lib/linty/analyze'
 import type { AnalysisResult, Issue, Language } from '@/lib/linty-data'
 
 const SUPPORTED_LANGUAGES = ['javascript', 'typescript', 'javascriptreact', 'typescriptreact']
@@ -84,7 +84,7 @@ export function deactivate(): void {
 async function analyzeDocument(document: vscode.TextDocument): Promise<void> {
   const code = document.getText()
   const language = toLanguage(document)
-  const result = analyzeCode(code, language, fileNameOf(document))
+  const result = await analyzeWithFallback(code, language, fileNameOf(document))
   results.set(document.uri.toString(), result)
 
   const diagnostics = result.issues.map((issue) => toDiagnostic(document, issue))
