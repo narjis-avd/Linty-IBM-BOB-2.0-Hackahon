@@ -4,6 +4,8 @@
 
 Built by **Team North** for the IBM Bob 2.0 Hackathon.
 
+**Live demo:** https://linty.vercel.app (open a recorded Bob run, or go straight to https://linty.vercel.app/#run=cart-total&tab=tests)
+
 ## How it works
 
 ```
