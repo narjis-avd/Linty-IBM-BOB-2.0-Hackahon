@@ -1,0 +1,14 @@
+# Linty — IBM Bob custom modes
+# Agent modes used to audit and fix code with the Linty rule set.
+# (Adjust field names to IBM Bob's actual custom-mode schema if they differ.)
+
+modes:
+  - name: linty-auditor
+    description: Security and code-quality audit using the Linty rules.
+    tools: read-only
+
+  - name: linty-fixer
+    description: Applies minimal, safe fixes for each issue the auditor reports.
+
+  - name: linty-tester
+    description: Generates a test case for every detected issue.

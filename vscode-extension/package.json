@@ -1,0 +1,65 @@
+{
+  "name": "linty",
+  "displayName": "Linty",
+  "description": "AI code assistant — find issues, apply fixes, and generate tests for JavaScript and TypeScript.",
+  "version": "0.1.0",
+  "publisher": "linty",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "linty.analyzeFile",
+        "title": "Linty: Analyze File",
+        "category": "Linty"
+      },
+      {
+        "command": "linty.showReport",
+        "title": "Linty: Show Report",
+        "category": "Linty"
+      },
+      {
+        "command": "linty.fixAll",
+        "title": "Linty: Fix All Issues",
+        "category": "Linty"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "linty.analyzeFile",
+          "when": "resourceExtname =~ /\\.(js|jsx|ts|tsx|mjs|cjs)$/",
+          "group": "linty@1"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "linty.analyzeFile",
+          "when": "resourceExtname =~ /\\.(js|jsx|ts|tsx|mjs|cjs)$/",
+          "group": "linty@1"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "node esbuild.mjs",
+    "build": "node esbuild.mjs",
+    "package": "vsce package --allow-missing-repository",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.21.0",
+    "typescript": "^5"
+  }
+}
