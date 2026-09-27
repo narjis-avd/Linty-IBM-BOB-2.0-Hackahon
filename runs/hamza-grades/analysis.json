@@ -1,0 +1,54 @@
+{
+  "errors": [
+    {
+      "id": "E1",
+      "type": "Logical",
+      "description": "letterGrade uses `points > 90` instead of `points >= 90`, so a score of exactly 90 returns 'B' rather than 'A', contradicting the comment 'and above'.",
+      "line": 11,
+      "severity": "High",
+      "suggestion": "Change `points > 90` to `points >= 90`."
+    },
+    {
+      "id": "E2",
+      "type": "Runtime",
+      "description": "classAverage does not guard against an empty scores array; when scores.length is 0 the function divides by zero and returns NaN.",
+      "line": 20,
+      "severity": "High",
+      "suggestion": "Add an early return of 0 (or throw) when scores.length === 0, before the division."
+    },
+    {
+      "id": "E3",
+      "type": "Logical",
+      "description": "topStudents calls scores.sort() directly, which mutates the caller's original array in-place as an unintended side-effect.",
+      "line": 25,
+      "severity": "Medium",
+      "suggestion": "Sort a shallow copy instead: `const ranked = [...scores].sort((a, b) => b.points - a.points)`."
+    },
+    {
+      "id": "E4",
+      "type": "Logical",
+      "description": "passRate filters with `s.points > 60` (strict greater-than), so a student with exactly 60 points is excluded despite the stated rule 'passed (60 or more)'.",
+      "line": 32,
+      "severity": "High",
+      "suggestion": "Change `s.points > 60` to `s.points >= 60`."
+    },
+    {
+      "id": "E5",
+      "type": "Logical",
+      "description": "medianPoints calls .sort() without a numeric comparator, causing lexicographic (string) ordering of numbers (e.g. [9, 80] sorts as [80, 9]), producing wrong medians.",
+      "line": 38,
+      "severity": "High",
+      "suggestion": "Pass a numeric comparator: `.sort((a, b) => a - b)`."
+    },
+    {
+      "id": "E6",
+      "type": "Logical",
+      "description": "medianPoints always picks the single upper-middle index for even-length arrays instead of averaging the two middle values, so the median is incorrect for even-sized inputs.",
+      "line": 39,
+      "severity": "Medium",
+      "suggestion": "For even-length arrays, return the average of sorted[mid - 1] and sorted[mid] where mid = sorted.length / 2."
+    }
+  ],
+  "risk_level": "High",
+  "summary": "The file contains six issues across four functions. Two boundary-condition bugs (letterGrade off-by-one on 90, passRate off-by-one on 60) will produce wrong grades and pass-rate percentages. classAverage will crash with NaN on an empty input. topStudents silently mutates the caller's array. medianPoints is broken for all inputs because it sorts numbers as strings, and additionally computes an incorrect median for even-length arrays."
+}
