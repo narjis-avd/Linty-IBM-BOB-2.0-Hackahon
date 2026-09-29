@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Linty: pitch deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: 1920px 1080px; margin: 0; }
+  :root { --bg:#0B0F1A; --panel:#111829; --line:rgba(255,255,255,.1); --blue:#4F8CFF; --cyan:#00E0FF; --green:#00FF9C; --red:#ff6b6b; --text:#e8eefc; --muted:#8a96b3; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; }
+  .slide { width: 1920px; height: 1080px; padding: 110px 140px; position: relative; overflow: hidden; page-break-after: always; display: flex; flex-direction: column; }
+  .slide::before { content: ""; position: absolute; width: 1100px; height: 1100px; right: -380px; top: -420px; background: radial-gradient(circle, rgba(79,140,255,.18), transparent 62%); }
+  .slide::after { content: ""; position: absolute; width: 900px; height: 900px; left: -380px; bottom: -520px; background: radial-gradient(circle, rgba(0,224,255,.10), transparent 60%); }
+  .slide > * { position: relative; z-index: 1; }
+  .kicker { font-family: 'JetBrains Mono', monospace; color: var(--cyan); font-size: 26px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 28px; }
+  h1 { font-size: 132px; font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+  h2 { font-size: 76px; font-weight: 700; letter-spacing: -.03em; line-height: 1.08; max-width: 1500px; }
+  p.lead { font-size: 38px; color: var(--muted); line-height: 1.45; max-width: 1400px; margin-top: 36px; }
+  .grad { background: linear-gradient(90deg, var(--blue), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .foot { position: absolute; left: 140px; right: 140px; bottom: 60px; display: flex; justify-content: space-between; color: var(--muted); font-size: 22px; font-family: 'JetBrains Mono', monospace; z-index: 1; }
+  .logo { display: inline-flex; align-items: center; gap: 22px; }
+  .mark { width: 92px; height: 92px; border-radius: 24px; background: linear-gradient(135deg, var(--blue), var(--cyan)); box-shadow: 0 0 60px rgba(0,224,255,.35); display: grid; place-items: center; font-size: 52px; font-weight: 800; color: var(--bg); }
+  .row { display: grid; gap: 32px; margin-top: 64px; }
+  .c2 { grid-template-columns: 1fr 1fr; } .c3 { grid-template-columns: repeat(3, 1fr); } .c4 { grid-template-columns: repeat(4, 1fr); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 40px; }
+  .card h3 { font-size: 36px; margin-bottom: 14px; }
+  .card p { font-size: 27px; color: var(--muted); line-height: 1.45; }
+  .card .ico { font-size: 52px; margin-bottom: 18px; }
+  .big { font-size: 104px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+  .big small { font-size: 44px; color: var(--muted); font-weight: 600; }
+  .label { font-size: 26px; color: var(--muted); margin-top: 16px; }
+  .green { color: var(--green); } .red { color: var(--red); } .cyan { color: var(--cyan); }
+  .flow { display: flex; align-items: center; gap: 22px; margin-top: 70px; }
+  .step { flex: 1; background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 34px 30px; text-align: center; }
+  .step .n { font-family: 'JetBrains Mono', monospace; color: var(--cyan); font-size: 22px; }
+  .step .t { font-size: 36px; font-weight: 700; margin: 10px 0 8px; }
+  .step .d { font-size: 23px; color: var(--muted); line-height: 1.35; }
+  .arrow { font-size: 44px; color: var(--blue); }
+  .code { font-family: 'JetBrains Mono', monospace; font-size: 30px; background: #070a12; border: 1px solid var(--line); border-radius: 18px; padding: 30px 36px; line-height: 1.6; }
+  ul.clean { list-style: none; margin-top: 50px; }
+  ul.clean li { font-size: 36px; line-height: 1.4; padding: 18px 0 18px 56px; position: relative; border-bottom: 1px solid var(--line); }
+  ul.clean li::before { content: "→"; position: absolute; left: 0; color: var(--cyan); }
+  table { width: 100%; border-collapse: collapse; margin-top: 56px; font-size: 30px; }
+  th, td { text-align: left; padding: 22px 26px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; font-size: 24px; text-transform: uppercase; letter-spacing: .06em; }
+  td.us { color: var(--green); font-weight: 600; }
+  .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 60px; }
+  .team div { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 30px 34px; font-size: 34px; font-weight: 600; }
+  .team span { display: block; font-size: 24px; color: var(--muted); font-weight: 400; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<!-- 1. Title -->
+<section class="slide" style="justify-content:center">
+  <div class="logo"><div class="mark">L</div><div class="kicker" style="margin:0">IBM Bob 2.0 Hackathon · Team North</div></div>
+  <h1 style="margin-top:56px">Linty</h1>
+  <h2 style="margin-top:28px;font-weight:600;color:#c9d6f5">AI code review that <span class="grad">proves its fixes.</span></h2>
+  <p class="lead">Four IBM Bob agents find the bugs, fix them, write the tests, and then run those tests to prove it.</p>
+  <div class="foot"><span>Built with IBM Bob IDE</span><span>{{VERCEL_URL}}</span></div>
+</section>
+
+<!-- 2. Problem -->
+<section class="slide">
+  <div class="kicker">01 · The problem</div>
+  <h2>Code review is slow, manual, and the tests get skipped.</h2>
+  <div class="row c3">
+    <div class="card"><div class="ico">⏳</div><h3>Reviews eat hours</h3><p>A reviewer reads every line, spots the bug, explains it, and waits for a fix. It happens on every pull request.</p></div>
+    <div class="card"><div class="ico">🧪</div><h3>Tests get skipped</h3><p>Writing regression tests is the first step cut under deadline pressure, so the same bug comes back.</p></div>
+    <div class="card"><div class="ico">🤷</div><h3>AI fixes aren't trusted</h3><p>Assistants suggest fixes, but without proof a human still has to verify every change by hand.</p></div>
+  </div>
+</section>
+
+<!-- 3. Solution -->
+<section class="slide">
+  <div class="kicker">02 · The solution</div>
+  <h2>One command. Four agents. <span class="grad">A verified review.</span></h2>
+  <div class="flow">
+    <div class="step"><div class="n">AGENT 1</div><div class="t">🔍 Analyze</div><div class="d">Finds every issue with line, type and severity</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">AGENT 2</div><div class="t">🔧 Fix</div><div class="d">Smallest safe change per issue</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">AGENT 3</div><div class="t">🧪 Test</div><div class="d">A regression test for every fix</div></div>
+    <div class="arrow">→</div>
+    <div class="step"><div class="n">AGENT 4</div><div class="t">📊 Report</div><div class="d">Factual summary and next steps</div></div>
+    <div class="arrow">→</div>
+    <div class="step" style="border-color:rgba(0,255,156,.4)"><div class="n" style="color:var(--green)">PROOF</div><div class="t">✅ Verify</div><div class="d">Tests run on buggy vs. fixed code</div></div>
+  </div>
+  <div class="code" style="margin-top:64px">/linty-review samples/cart-total.ts</div>
+</section>
+
+<!-- 4. How Bob powers it -->
+<section class="slide">
+  <div class="kicker">03 · IBM Bob is the engine</div>
+  <h2>Linty ships as a Bob configuration.</h2>
+  <div class="row c2">
+    <div class="card"><h3>🧹 Custom modes</h3><p>An orchestrator plus four specialist modes. Each can only write its own output file (<code>fileRegex</code>): permissions as governance.</p></div>
+    <div class="card"><h3>🧩 Subtasks</h3><p>The orchestrator hands each stage to a specialist as a separate Bob subtask, a genuine multi-agent pipeline.</p></div>
+    <div class="card"><h3>⚡ Slash command</h3><p><code>/linty-review &lt;file&gt;</code> runs everything: start, 4 agents, finalize, summary.</p></div>
+    <div class="card"><h3>🛡️ Rules + .bobignore</h3><p>Shared guardrails for every mode: no secrets, never touch the ground truth, report measured numbers only.</p></div>
+  </div>
+</section>
+
+<!-- 5. Proof -->
+<section class="slide">
+  <div class="kicker">04 · Proof, not promises</div>
+  <h2>Every fix ships with tests that were actually run.</h2>
+  <div class="row c2" style="margin-top:80px">
+    <div class="card" style="border-color:rgba(255,107,107,.35)"><div class="big red">{{ORIG_PASS}}<small> / {{TESTS}}</small></div><div class="label">tests pass on the <b>original</b> buggy code</div></div>
+    <div class="card" style="border-color:rgba(0,255,156,.35)"><div class="big green">{{FIXED_PASS}}<small> / {{TESTS}}</small></div><div class="label">tests pass on Linty's <b>fixed</b> code</div></div>
+  </div>
+  <p class="lead">Generated Vitest tests are executed against both versions. A test that fails before and passes after is evidence the fix is real.</p>
+</section>
+
+<!-- 6. Results -->
+<section class="slide">
+  <div class="kicker">05 · Measured results</div>
+  <h2>Demo: a shopping-cart module with 5 seeded bugs.</h2>
+  <div class="row c4" style="margin-top:80px">
+    <div class="card"><div class="big cyan">{{CAUGHT}}<small>/{{EXPECTED}}</small></div><div class="label">seeded bugs caught</div></div>
+    <div class="card"><div class="big">{{ISSUES}}</div><div class="label">issues reported</div></div>
+    <div class="card"><div class="big">{{FIXED}}</div><div class="label">issues fixed</div></div>
+    <div class="card"><div class="big green">{{TIME}}</div><div class="label">end to end in Bob</div></div>
+  </div>
+  <p class="lead">Every number here is measured by our finalize script from a real Bob IDE run. Nothing is estimated.</p>
+</section>
+
+<!-- 7. Web app -->
+<section class="slide">
+  <div class="kicker">06 · The Linty dashboard</div>
+  <h2>Every Bob run, replayable by anyone.</h2>
+  <ul class="clean">
+    <li>Live agent pipeline with the real stage timings</li>
+    <li>Issues with severity, type and line</li>
+    <li>Side-by-side diff: original vs. fixed by Linty</li>
+    <li>Executed tests: before → after, per issue</li>
+    <li>Report built only from measured numbers, downloadable as JSON</li>
+  </ul>
+  <div class="foot"><span>Next.js on Vercel · optional live mode on IBM watsonx.ai (Granite)</span><span>{{VERCEL_URL}}</span></div>
+</section>
+
+<!-- 8. Market -->
+<section class="slide">
+  <div class="kicker">07 · Market</div>
+  <h2>Every team that ships code reviews code.</h2>
+  <div class="row c3">
+    <div class="card"><h3>Who</h3><p>Engineering teams, CI/CD owners and open-source maintainers who want faster, trustworthy reviews.</p></div>
+    <div class="card"><h3>Where it fits</h3><p>Inside the IDE today via Bob; on every pull request next, via a GitHub Action.</p></div>
+    <div class="card"><h3>Model</h3><p>Free for open source; per-seat for teams, with an audit trail of every AI change for regulated industries.</p></div>
+  </div>
+</section>
+
+<!-- 9. Competition -->
+<section class="slide">
+  <div class="kicker">08 · Why Linty is different</div>
+  <h2>Other tools suggest. Linty proves.</h2>
+  <table>
+    <tr><th></th><th>Linters</th><th>AI chat assistants</th><th>Linty</th></tr>
+    <tr><td>Finds logic bugs</td><td>Rarely</td><td>Yes</td><td class="us">Yes</td></tr>
+    <tr><td>Applies the fix</td><td>Style only</td><td>Suggests</td><td class="us">Yes, minimal</td></tr>
+    <tr><td>Writes regression tests</td><td>No</td><td>On request</td><td class="us">Every fix</td></tr>
+    <tr><td>Runs tests to prove the fix</td><td>No</td><td>No</td><td class="us">Before &amp; after</td></tr>
+    <tr><td>Scoped agent permissions</td><td>n/a</td><td>No</td><td class="us">Per-agent files</td></tr>
+  </table>
+</section>
+
+<!-- 10. Team / close -->
+<section class="slide">
+  <div class="kicker">09 · Team North</div>
+  <h2>Linty: <span class="grad">review done, proof attached.</span></h2>
+  <div class="team">
+    <div>Mujtaba Zubair<span>Team lead · backend</span></div>
+    <div>Narjis Fatima<span>Project lead</span></div>
+    <div>Saman Nadeem<span>UI design</span></div>
+    <div>Naveen Subhan<span>Testing</span></div>
+    <div>Hamza Hassan Khan<span>Team member</span></div>
+    <div>Muzammil Qureshi<span>Research · UI design support</span></div>
+  </div>
+  <div class="foot"><span>github.com/narjis-avd/Linty-IBM-BOB-2.0-Hackahon · MIT</span><span>{{VERCEL_URL}}</span></div>
+</section>
+
+</body>
+</html>

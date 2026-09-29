@@ -80,6 +80,7 @@ Copy `.env.example` to `.env.local` and fill in an IBM watsonx.ai API key and pr
 | `lib/linty/schema.ts` | The report schema shared by everything |
 | `backend/` | Optional watsonx.ai client and streaming pipeline |
 | `app/` | Next.js web app |
+| `docs/submission/` | Hackathon submission pack: form text, slides PDF, cover, demo video, checklist, and the scripts that build them |
 | `bob_sessions/` | Bob task session screenshots and exported histories from every team member |
 
 ## AI tools disclosure

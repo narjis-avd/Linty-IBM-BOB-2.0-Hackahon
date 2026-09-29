@@ -46,3 +46,9 @@ runs/*/subject.*
 runs/*/vitest-*.json
 
 .vercel
+
+# submission build scratch
+docs/submission/build/*.filled.html
+docs/submission/build/slide*.html
+!docs/submission/build/slides.html
+docs/submission/build/video_tmp/

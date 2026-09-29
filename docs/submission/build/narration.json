@@ -1,0 +1,32 @@
+[
+  {
+    "id": "01-problem",
+    "voice": "en-US-AvaNeural",
+    "gender": "female",
+    "text": "Every team reviews code, and it's slow. Someone reads every line, finds the bug, explains it, and waits for a fix. The regression tests get skipped. And when an AI suggests a fix, you still have to check it by hand. We built Linty to change that."
+  },
+  {
+    "id": "02-solution",
+    "voice": "en-US-AndrewNeural",
+    "gender": "male",
+    "text": "Linty is an AI code review that proves its fixes. One command in IBM Bob, slash linty review, and four agents take over. An Analyzer finds every issue. A Fixer applies the smallest safe change. A Tester writes a regression test for each fix. And a Reporter writes the summary."
+  },
+  {
+    "id": "03-bob",
+    "voice": "en-GB-SoniaNeural",
+    "gender": "female",
+    "text": "Bob is the engine. Linty ships as a Bob configuration: five custom modes, a slash command, and project rules. The orchestrator hands each stage to a specialist as its own Bob subtask. And each specialist can only write its own output file, so the Analyzer can't touch the code, and the Fixer can't touch the tests. Bob's permissions become our governance layer."
+  },
+  {
+    "id": "04-demo",
+    "voice": "en-US-BrianNeural",
+    "gender": "male",
+    "text": "Here's a real run in IBM Bob, on a shopping cart module with five seeded bugs: an off-by-one loop, an inverted discount, a divide by zero, a sort that mutates the cart, and unrounded money. Bob ran each agent in turn. The Analyzer reported every issue with its line and severity, the Fixer patched the file, the Tester wrote twelve Vitest tests, and the Reporter summed it up."
+  },
+  {
+    "id": "05-proof",
+    "voice": "en-US-EmmaNeural",
+    "gender": "female",
+    "text": "Then comes the part other tools skip: proof. Linty runs the generated tests against the original code, where they fail, and against the fixed code, where they pass. {{PROOF_SENTENCE}} Every number you see is measured, not estimated. And every run is published to the Linty dashboard, where anyone can replay it: the issues, a side-by-side diff, the executed tests, and the report. Linty. Review done, proof attached."
+  }
+]
